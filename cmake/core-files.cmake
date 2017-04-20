@@ -357,6 +357,7 @@ set(MBGL_CORE_FILES
 
     # style/conversion
     include/mbgl/style/conversion/constant.hpp
+    include/mbgl/style/conversion/coordinate.hpp
     include/mbgl/style/conversion/data_driven_property_value.hpp
     include/mbgl/style/conversion/filter.hpp
     include/mbgl/style/conversion/function.hpp
@@ -439,11 +440,15 @@ set(MBGL_CORE_FILES
 
     # style/sources
     include/mbgl/style/sources/geojson_source.hpp
+    include/mbgl/style/sources/image_source.hpp
     include/mbgl/style/sources/raster_source.hpp
     include/mbgl/style/sources/vector_source.hpp
     src/mbgl/style/sources/geojson_source.cpp
     src/mbgl/style/sources/geojson_source_impl.cpp
     src/mbgl/style/sources/geojson_source_impl.hpp
+    src/mbgl/style/sources/image_source.cpp
+    src/mbgl/style/sources/image_source_impl.cpp
+    src/mbgl/style/sources/image_source_impl.hpp
     src/mbgl/style/sources/raster_source.cpp
     src/mbgl/style/sources/raster_source_impl.cpp
     src/mbgl/style/sources/raster_source_impl.hpp
