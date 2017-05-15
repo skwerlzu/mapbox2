@@ -234,4 +234,8 @@ void GeometryTile::querySourceFeatures(
     }
 }
 
+float GeometryTile::yStretch() const {
+    return collisionTile->yStretch;
+}
+
 } // namespace mbgl

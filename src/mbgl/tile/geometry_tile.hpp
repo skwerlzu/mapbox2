@@ -82,6 +82,8 @@ public:
 
     void onError(std::exception_ptr);
     
+    float yStretch() const override;
+    
 protected:
     const GeometryTileData* getData() {
         return data.get();
