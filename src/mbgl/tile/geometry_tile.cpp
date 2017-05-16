@@ -44,7 +44,8 @@ GeometryTile::GeometryTile(const OverscaledTileID& id_,
              parameters.pixelRatio),
       glyphAtlas(glyphAtlas_),
       spriteAtlas(spriteAtlas_),
-      placementThrottler(Milliseconds(300), [this] { invokePlacement(); }) {
+      placementThrottler(Milliseconds(300), [this] { invokePlacement(); }),
+      lastYStretch(1.0f) {
 }
 
 GeometryTile::~GeometryTile() {
@@ -140,6 +141,9 @@ void GeometryTile::onPlacement(PlacementResult result) {
     }
     symbolBuckets = std::move(result.symbolBuckets);
     collisionTile = std::move(result.collisionTile);
+    if (collisionTile.get()) {
+        lastYStretch = collisionTile->yStretch;
+    }
     observer->onTileChanged(*this);
 }
 
@@ -235,7 +239,10 @@ void GeometryTile::querySourceFeatures(
 }
 
 float GeometryTile::yStretch() const {
-    return collisionTile->yStretch;
+    // collisionTile gets reset in onLayout but we don't clear the symbolBuckets
+    // until a new placement result comes along, so keep the yStretch value in
+    // case we need to render them.
+    return lastYStretch;
 }
 
 } // namespace mbgl
