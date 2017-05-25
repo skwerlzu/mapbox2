@@ -45,6 +45,18 @@ typedef struct MGLCoordinateBounds {
     CLLocationCoordinate2D ne;
 } MGLCoordinateBounds;
 
+typedef struct MGLCoordinateQuad {
+    /** Coordinate at the northwest corner. */
+    CLLocationCoordinate2D tl;
+    /** Coordinate at the northeast corner. */
+    CLLocationCoordinate2D tr;
+    /** Coordinate at the southeast corner. */
+    CLLocationCoordinate2D br;
+    /** Coordinate at the southwest corner. */
+    CLLocationCoordinate2D bl;
+} MGLCoordinateQuad;
+
+
 /**
  Creates a new `MGLCoordinateBounds` structure from the given southwest and
  northeast coordinates.

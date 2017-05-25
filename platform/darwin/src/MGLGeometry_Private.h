@@ -8,11 +8,20 @@
 #import <mbgl/util/geo.hpp>
 #import <mbgl/util/geometry.hpp>
 
+#import <vector>
+
 /// Returns the smallest rectangle that contains both the given rectangle and
 /// the given point.
 CGRect MGLExtendRect(CGRect rect, CGPoint point);
 
 mbgl::LatLng MGLLatLngFromLocationCoordinate2D(CLLocationCoordinate2D coordinate);
+
+NS_INLINE std::vector<mbgl::LatLng> MGLLatLngFromLocationQuad(MGLCoordinateQuad quad) {
+    return { MGLLatLngFromLocationCoordinate2D(quad.tl),
+    MGLLatLngFromLocationCoordinate2D(quad.tr),
+    MGLLatLngFromLocationCoordinate2D(quad.br),
+    MGLLatLngFromLocationCoordinate2D(quad.bl) };
+}
 
 NS_INLINE mbgl::Point<double> MGLPointFromLocationCoordinate2D(CLLocationCoordinate2D coordinate) {
     return mbgl::Point<double>(coordinate.longitude, coordinate.latitude);
