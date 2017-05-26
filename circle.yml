@@ -8,6 +8,7 @@ workflows:
       - android-debug-arm-v7
       - android-release-all
       - node4-clang39-release
+      - node6-clang39-release-machine
       - node6-clang39-release
       - node6-clang39-debug
       - linux-clang39-debug
@@ -236,6 +237,30 @@ jobs:
 
 
 # ------------------------------------------------------------------------------
+  node6-clang39-release-machine:
+    machine: true
+    working_directory: /home/circleci
+    steps:
+      - run:
+          name: Download docker image
+          command: sudo docker pull mbgl/ci:r3-linux-clang-3.9
+      - run:
+          name: Run docker container
+          command: |
+            sudo docker run -it --rm --privileged mbgl/ci:r3-linux-clang-3.9 \
+              bash -c "git remote update \
+                && git checkout ${CIRCLE_BRANCH} \
+                && git submodule update \
+                && export BUILDTYPE=Release \
+                && export WITH_EGL=1 \
+                && make node \
+                && source scripts/circle_setup.sh \
+                && mapbox_install_logbt \
+                && mapbox_install_apitrace \
+                && mapbox_export_mesa_library_path \
+                && DISPLAY=:0 xvfb-run --server-args='-screen 0 1024x768x24' \
+                  ./logbt -- apitrace trace --api=egl -v make test-node"
+
   node6-clang39-release:
     docker:
       - image: mbgl/ci:r3-linux-clang-3.9
