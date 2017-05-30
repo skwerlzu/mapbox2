@@ -63,20 +63,20 @@ public final class TrackingSettings {
   void onRestoreInstanceState(Bundle savedInstanceState) {
     try {
       setMyLocationEnabled(
-              savedInstanceState.getBoolean(MapboxConstants.STATE_MY_LOCATION_ENABLED),
-              savedInstanceState.getBoolean(MapboxConstants.STATE_USING_CUSTOM_LOCATION_SOURCE)
+        savedInstanceState.getBoolean(MapboxConstants.STATE_MY_LOCATION_ENABLED),
+        savedInstanceState.getBoolean(MapboxConstants.STATE_USING_CUSTOM_LOCATION_SOURCE)
       );
     } catch (SecurityException ignore) {
       // User did not accept location permissions
     }
     // noinspection ResourceType
     setMyLocationTrackingMode(savedInstanceState.getInt(
-            MapboxConstants.STATE_MY_LOCATION_TRACKING_MODE, MyLocationTracking.TRACKING_NONE));
+      MapboxConstants.STATE_MY_LOCATION_TRACKING_MODE, MyLocationTracking.TRACKING_NONE));
     // noinspection ResourceType
     setMyBearingTrackingMode(savedInstanceState.getInt(
-            MapboxConstants.STATE_MY_BEARING_TRACKING_MODE, MyBearingTracking.NONE));
+      MapboxConstants.STATE_MY_BEARING_TRACKING_MODE, MyBearingTracking.NONE));
     setDismissLocationTrackingOnGesture(savedInstanceState.getBoolean(
-            MapboxConstants.STATE_MY_LOCATION_TRACKING_DISMISS, true));
+      MapboxConstants.STATE_MY_LOCATION_TRACKING_DISMISS, true));
     setDismissBearingTrackingOnGesture(savedInstanceState.getBoolean(
             MapboxConstants.STATE_MY_BEARING_TRACKING_DISMISS, true));
   }
@@ -242,9 +242,9 @@ public final class TrackingSettings {
     //    The user settings are enabled AND;
     //    EITHER bearing tracking is dismissed on gesture OR there is no bearing tracking
     return uiSettings.isRotateGesturesEnabled()
-            && (dismissBearingTrackingOnGesture
-            || myLocationView.getMyBearingTrackingMode() == MyBearingTracking.NONE
-            || myLocationView.getMyLocationTrackingMode() == MyLocationTracking.TRACKING_NONE);
+      && (dismissBearingTrackingOnGesture
+      || myLocationView.getMyBearingTrackingMode() == MyBearingTracking.NONE
+      || myLocationView.getMyLocationTrackingMode() == MyLocationTracking.TRACKING_NONE);
   }
 
   /**
@@ -254,8 +254,8 @@ public final class TrackingSettings {
    */
   public boolean isScrollGestureCurrentlyEnabled() {
     return uiSettings.isScrollGesturesEnabled()
-            && (dismissLocationTrackingOnGesture
-            || myLocationView.getMyLocationTrackingMode() == MyLocationTracking.TRACKING_NONE);
+      && (dismissLocationTrackingOnGesture
+      || myLocationView.getMyLocationTrackingMode() == MyLocationTracking.TRACKING_NONE);
   }
 
   /**
@@ -347,7 +347,7 @@ public final class TrackingSettings {
   private void setMyLocationEnabled(boolean locationEnabled, boolean isCustomLocationSource) {
     if (!PermissionsManager.areLocationPermissionsGranted(myLocationView.getContext())) {
       Timber.e("Could not activate user location tracking: "
-              + "user did not accept the permission or permissions were not requested.");
+        + "user did not accept the permission or permissions were not requested.");
       return;
     }
     myLocationEnabled = locationEnabled;
