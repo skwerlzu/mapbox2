@@ -133,7 +133,7 @@ public class MyLocationTintActivity extends BaseLocationActivity implements Loca
   protected void onStart() {
     super.onStart();
     mapView.onStart();
-    LocationSource.getLocationEngine(this).addLocationEngineListener(this);
+//    LocationSource.getLocationEngine(this).addLocationEngineListener(this);
   }
 
   @Override
@@ -151,7 +151,7 @@ public class MyLocationTintActivity extends BaseLocationActivity implements Loca
   @Override
   protected void onStop() {
     super.onStop();
-    LocationSource.getLocationEngine(this).removeLocationEngineListener(this);
+   // LocationSource.getLocationEngine(this).removeLocationEngineListener(this);
     mapView.onStop();
   }
 

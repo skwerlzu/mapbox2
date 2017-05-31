@@ -1,7 +1,9 @@
 package com.mapbox.mapboxsdk.testapp.activity.userlocation;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,8 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -29,7 +33,8 @@ import com.mapbox.mapboxsdk.testapp.R;
  * using gesture configurations.
  * </p>
  */
-public class MyLocationTrackingModeActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MyLocationTrackingModeActivity extends AppCompatActivity implements MapboxMap.OnMyLocationChangeListener,
+  AdapterView.OnItemSelectedListener {
 
   public static final int TRACKING_NONE_INDEX = 0;
   public static final int TRACKING_FOLLOW_INDEX = 1;
@@ -123,11 +128,21 @@ public class MyLocationTrackingModeActivity extends AppCompatActivity implements
           }
         });
 
+
         if (savedInstanceState == null) {
           mapboxMap.setMyLocationEnabled(true);
         }
+        mapboxMap.setOnMyLocationChangeListener(MyLocationTrackingModeActivity.this);
       }
     });
+  }
+
+  @Override
+  public void onMyLocationChange(@Nullable Location location) {
+    if (mapboxMap != null) {
+      mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+        new LatLng(location.getLatitude(), location.getLongitude()), 13));
+    }
   }
 
   @Override
@@ -186,6 +201,7 @@ public class MyLocationTrackingModeActivity extends AppCompatActivity implements
   @Override
   protected void onStop() {
     super.onStop();
+    mapboxMap.setOnMyLocationChangeListener(null);
     mapView.onStop();
   }
 

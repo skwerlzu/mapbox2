@@ -1861,15 +1861,6 @@ public final class MapboxMap {
   }
 
   /**
-   * Removes custom location source of the my-location layer and brings back default {@link LocationSource}
-   * location source.
-   */
-  @UiThread
-  public void removeLocationSource() {
-    trackingSettings.removeLocationSource();
-  }
-
-  /**
    * Replaces the location source of the my-location layer.
    *
    * @param locationSource A {@link LocationEngine} location source to use in the my-location layer.

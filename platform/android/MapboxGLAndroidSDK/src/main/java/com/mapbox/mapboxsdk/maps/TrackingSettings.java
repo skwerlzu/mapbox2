@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
@@ -47,7 +48,7 @@ public final class TrackingSettings {
   }
 
   void initialise(MapboxMapOptions options) {
-    locationSource = LocationSource.getLocationEngine(myLocationView.getContext());
+    locationSource = Mapbox.getDefaultLocationSource();
     setMyLocationEnabled(options.getLocationEnabled());
   }
 
@@ -356,15 +357,17 @@ public final class TrackingSettings {
   }
 
   void setLocationSource(LocationEngine locationSource) {
-    this.locationSource = locationSource;
-    this.isCustomLocationSource = true;
-    myLocationView.setLocationSource(locationSource);
-  }
+    if (this.locationSource != null && this.locationSource.equals(locationSource)) {
+      // this source is already active
+      return;
+    }
 
-  void removeLocationSource() {
-    locationSource = LocationSource.getLocationEngine(myLocationView.getContext());
-    this.isCustomLocationSource = false;
-    myLocationView.removeLocationSource();
+    this.isCustomLocationSource = locationSource != null;
+    if (locationSource == null) {
+      locationSource = Mapbox.getDefaultLocationSource();
+    }
+    this.locationSource = locationSource;
+    myLocationView.setLocationSource(locationSource);
   }
 
   void update() {

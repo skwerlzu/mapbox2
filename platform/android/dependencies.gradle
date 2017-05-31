@@ -22,7 +22,7 @@ ext {
 
             // mapzen lost
             lost                   : 'com.mapzen.android:lost:3.0.0',
-
+            
             // unit test
             junit                  : 'junit:junit:4.12',
             mockito                : 'org.mockito:mockito-core:2.2.27',

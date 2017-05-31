@@ -2,6 +2,7 @@ package com.mapbox.mapboxsdk;
 
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ public final class Mapbox {
   private Context context;
   private String accessToken;
   private Boolean connected;
+  private LocationSource lostLocationSource;
 
   /**
    * Get an instance of Mapbox.
@@ -45,8 +47,8 @@ public final class Mapbox {
   public static synchronized Mapbox getInstance(@NonNull Context context, @NonNull String accessToken) {
     if (INSTANCE == null) {
       Context appContext = context.getApplicationContext();
-      INSTANCE = new Mapbox(appContext, accessToken);
-      LocationEngine locationEngine = LocationSource.getLocationEngine(appContext);
+      INSTANCE = new Mapbox(appContext, accessToken, new LocationSource(appContext));
+      LocationEngine locationEngine = new LocationSource(appContext);
       locationEngine.setPriority(LocationEnginePriority.NO_POWER);
       MapboxTelemetry.getInstance().initialize(
         appContext, accessToken, BuildConfig.MAPBOX_EVENTS_USER_AGENT, locationEngine);
@@ -55,9 +57,10 @@ public final class Mapbox {
     return INSTANCE;
   }
 
-  Mapbox(@NonNull Context context, @NonNull String accessToken) {
+  Mapbox(@NonNull Context context, @NonNull String accessToken, LocationSource locationSource) {
     this.context = context;
     this.accessToken = accessToken;
+    this.lostLocationSource = locationSource;
   }
 
   /**
@@ -127,5 +130,9 @@ public final class Mapbox {
     ConnectivityManager cm = (ConnectivityManager) INSTANCE.context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
     return (activeNetwork != null && activeNetwork.isConnected());
+  }
+
+  public static LocationSource getDefaultLocationSource() {
+    return INSTANCE.lostLocationSource;
   }
 }

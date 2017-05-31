@@ -3,6 +3,7 @@ package com.mapbox.mapboxsdk.location;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
@@ -40,9 +41,9 @@ public class LocationSource extends LocationEngine implements
   private WeakReference<Context> context;
   private LostApiClient lostApiClient;
 
-  private LocationSource(Context context) {
+  public LocationSource(Context context) {
     super();
-    this.context = new WeakReference<>(context);
+    this.context = new WeakReference<>(context.getApplicationContext());
     lostApiClient = new LostApiClient.Builder(this.context.get())
       .addConnectionCallbacks(this)
       .build();
@@ -68,8 +69,11 @@ public class LocationSource extends LocationEngine implements
    */
   @Override
   public void activate() {
-    if (lostApiClient != null && !lostApiClient.isConnected()) {
+    Timber.e("LOCDEBUG %s activate - going to connect %s", hashCode(), !lostApiClient.isConnected());
+    if (!lostApiClient.isConnected()) {
       lostApiClient.connect();
+    }else{
+      Timber.e("LOCDEBUG %s activate - NO connect", hashCode());
     }
   }
 
@@ -80,7 +84,8 @@ public class LocationSource extends LocationEngine implements
    */
   @Override
   public void deactivate() {
-    if (lostApiClient != null && lostApiClient.isConnected()) {
+    Timber.e("LOCDEBUG %s deactivate - going to disconnect %s", hashCode(), lostApiClient.isConnected());
+    if (lostApiClient.isConnected()) {
       lostApiClient.disconnect();
     }
   }
@@ -101,6 +106,7 @@ public class LocationSource extends LocationEngine implements
    */
   @Override
   public void onConnected() {
+    Timber.e("LOCDEBUG %s onConnected", hashCode());
     for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
@@ -112,6 +118,7 @@ public class LocationSource extends LocationEngine implements
   @Override
   public void onConnectionSuspended() {
     Timber.d("Connection suspended.");
+    Timber.e("LOCDEBUG %s ConnectedSuspended", hashCode());
   }
 
   /**
@@ -120,6 +127,7 @@ public class LocationSource extends LocationEngine implements
    * @return the last known location
    */
   @Override
+  @Nullable
   public Location getLastLocation() {
     if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
@@ -153,6 +161,7 @@ public class LocationSource extends LocationEngine implements
 
     if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
+      Timber.e("LOCDEBUG %s requestLocationUpdates with priority %s", hashCode(), priority);
       LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
     }
   }
@@ -163,6 +172,7 @@ public class LocationSource extends LocationEngine implements
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
+      Timber.e("LOCDEBUG %s removeLocationUpdates", hashCode());
       LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
     }
   }
@@ -175,6 +185,7 @@ public class LocationSource extends LocationEngine implements
   @Override
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
+      Timber.e("LOCDEBUG %s onLocationChanged %s", hashCode(), location);
       listener.onLocationChanged(location);
     }
   }
