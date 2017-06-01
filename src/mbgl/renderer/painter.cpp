@@ -327,6 +327,7 @@ void Painter::renderPass(PaintParameters& parameters,
 
             extrusionTexture->bind();
 
+            context.scissorTest = false;
             context.setStencilMode(gl::StencilMode::disabled());
             context.setDepthMode(depthModeForSublayer(0, gl::DepthMode::ReadWrite));
             context.clear(Color{ 0.0f, 0.0f, 0.0f, 0.0f }, 1.0f, {});

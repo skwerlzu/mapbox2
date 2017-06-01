@@ -63,6 +63,7 @@ protected:
     void assumeFramebufferBinding(gl::FramebufferID fbo);
     void assumeViewport(int32_t x, int32_t y, const Size&);
     void assumeViewportSize(const Size&);
+    void assumeScissorTest(bool);
 
     // Returns true when assumed framebuffer binding hasn't changed from the implicit binding.
     bool implicitFramebufferBound();
@@ -72,6 +73,7 @@ protected:
     void setFramebufferBinding(gl::FramebufferID fbo);
     void setViewport(int32_t x, int32_t y, const Size&);
     void setViewportSize(const Size&);
+    void setScissorTest(bool);
 
 protected:
     std::unique_ptr<gl::Context> context;
