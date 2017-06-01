@@ -32,9 +32,14 @@ void Backend::assumeFramebufferBinding(const gl::FramebufferID fbo) {
         assert(gl::value::BindFramebuffer::Get() == getContext().bindFramebuffer.getCurrentValue());
     }
 }
-void Backend::assumeViewportSize(const Size& size) {
-    getContext().viewport.setCurrentValue({ 0, 0, size });
+
+void Backend::assumeViewport(int32_t x, int32_t y, const Size& size) {
+    getContext().viewport.setCurrentValue({ x, y, size });
     assert(gl::value::Viewport::Get() == getContext().viewport.getCurrentValue());
+}
+
+void Backend::assumeViewportSize(const Size& size) {
+    assumeViewport(0, 0, size);
 }
 
 bool Backend::implicitFramebufferBound() {
@@ -48,9 +53,13 @@ void Backend::setFramebufferBinding(const gl::FramebufferID fbo) {
     }
 }
 
-void Backend::setViewportSize(const Size& size) {
-    getContext().viewport = { 0, 0, size };
+void Backend::setViewport(int32_t x, int32_t y, const Size& size) {
+    getContext().viewport = { x, y, size };
     assert(gl::value::Viewport::Get() == getContext().viewport.getCurrentValue());
+}
+
+void Backend::setViewportSize(const Size& size) {
+    setViewport(0, 0, size);
 }
 
 Backend::~Backend() = default;
